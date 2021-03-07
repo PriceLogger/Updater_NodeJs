@@ -42,7 +42,7 @@ class apiClient {
     }
 
     //get provider (tag) 
-    getProvider = async() => {
+    getProvider = () => {
         let promise = axios
             .get('provider', { headers: { authorization: this.token } })
             .then(response => {
@@ -50,6 +50,19 @@ class apiClient {
             })
             .catch(error => {
                 console.log('Unable to get provider');
+            })
+        this.promises.push(promise)
+        return promise;
+    }
+
+    sendPrice = (prices) => {
+        let promise = axios
+            .post('item/price', [...prices], { headers: { authorization: this.token } })
+            .then(response => {
+                console.log('Price updated');
+            })
+            .catch(error => {
+                console.log('Unable to send fetched price');
             })
         this.promises.push(promise)
         return promise;
