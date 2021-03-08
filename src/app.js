@@ -1,6 +1,6 @@
 const api = require('./apiClient');
 const { fetchItem } = require('./fetcher');
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzY3JpcHRVcGRhdGVyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjE1MDU5NjQxLCJleHAiOjE2MTU1NzgwNDF9.KoJEXF0ztp-1v7MaexFuQIb9cFQxMePaT7zlbDqfYDM";
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Indvcmtlci0wMSIsInJvbGUiOiJ3b3JrZXIiLCJpYXQiOjE2MTUyMDc4ODAsImV4cCI6MTYxNTcyNjI4MH0.P5ctE3fEMRlmiMjDUovINYdATa4MwBQG128xdavYylg";
 
 let API = new api(TOKEN);
 
@@ -11,7 +11,6 @@ console.time("Time to fetch");
 //get data from api
 API.getItem();
 API.getProvider();
-
 
 //when all request done
 API.whenAllDone(() => {
