@@ -1,4 +1,4 @@
-const axios = require('axios').create({ url: '/', baseURL: 'http://127.0.0.1:3000' });
+const axios = require('axios').create({ url: '/', baseURL: 'http://127.0.0.1:3000', timeout: 1000, });
 
 class apiClient {
 
@@ -9,8 +9,11 @@ class apiClient {
         this.promises = [];
     }
 
-    whenAllDone = (callback) => {
-        return Promise.all(this.promises).then(callback);
+    waitForFetch = () => {
+        return Promise.all(this.promises).catch(err => {
+            if (!err || !err.response || !err.response.data) throw err;
+            throw new APIError(err);
+        });
     }
 
     //get token
@@ -19,9 +22,6 @@ class apiClient {
             .post('auth', this.user)
             .then(response => {
                 this.token = response.data.token;
-            })
-            .catch(error => {
-                console.log('Unable to get token from api')
             })
         this.promises.push(promise)
         return promise;
@@ -34,9 +34,6 @@ class apiClient {
             .then(response => {
                 this.items = response.data;
             })
-            .catch(error => {
-                console.log('Unable to get Item from api')
-            })
         this.promises.push(promise)
         return promise;
     }
@@ -47,9 +44,6 @@ class apiClient {
             .get('provider', { headers: { authorization: this.token } })
             .then(response => {
                 this.providers = response.data;
-            })
-            .catch(error => {
-                console.log('Unable to get provider');
             })
         this.promises.push(promise)
         return promise;
@@ -66,6 +60,15 @@ class apiClient {
             })
         this.promises.push(promise)
         return promise;
+    }
+}
+
+class APIError extends Error {
+    constructor(err) {
+        super(err.response.data.message);
+        Object.keys(err.response.data.err).forEach(key => {
+            this[key] = err.response.data.err[key]
+        });
     }
 }
 
