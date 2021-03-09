@@ -29,7 +29,8 @@ API
             .then(() => {
                 //when the fetching of all items is completed send it back to api
                 API.sendPrice(prices)
-                    .then(() => {
+                    .then((response) => {
+                        console.log('Price updated');
                         //print time to fetch
                         console.timeEnd("Time to fetch");
                     })

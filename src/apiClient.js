@@ -52,12 +52,6 @@ class apiClient {
     sendPrice = (prices) => {
         let promise = axios
             .post('item/price', [...prices], { headers: { authorization: this.token } })
-            .then(response => {
-                console.log('Price updated');
-            })
-            .catch(error => {
-                console.log('Unable to send fetched price');
-            })
         this.promises.push(promise)
         return promise;
     }
