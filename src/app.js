@@ -1,12 +1,15 @@
+//dependency
 const cron = require('node-cron')
 const api = require('./apiClient');
 const { fetchItem } = require('./fetcher');
-const TOKEN = process.env.TOKEN || require('../config/token.json').TOKEN;
 
-console.log("Updtater running");
+//initiate apiClient
+const API = new api(require('../config/api.json'));
+console.log("Updater running");
 
+//run fetcher every hour
 cron.schedule('0 * * * *', () => {
-    let API = new api(TOKEN);
+
     let prices = [];
 
     //get data from api

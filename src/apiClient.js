@@ -1,8 +1,9 @@
-const axios = require('axios').create({ url: '/', baseURL: 'http://127.0.0.1:3000', timeout: 1000, });
-
 class apiClient {
 
-    constructor(token) {
+    constructor({ ip = '127.0.0.1', port = '3000', token = '', protocol = 'http' } = {}) {
+        let baseURL = protocol + '://' + ip + ':' + port;
+        console.log(baseURL)
+        this.axios = require('axios').create({ url: '/', baseURL: baseURL, timeout: 1000, });
         this.token = token;
         this.items = [];
         this.providers = [];
@@ -18,7 +19,7 @@ class apiClient {
 
     //get token
     auth = async() => {
-        let promise = axios
+        let promise = this.axios
             .post('auth', this.user)
             .then(response => {
                 this.token = response.data.token;
@@ -29,7 +30,7 @@ class apiClient {
 
     //get all item
     getItem = () => {
-        let promise = axios
+        let promise = this.axios
             .get('item')
             .then(response => {
                 this.items = response.data;
@@ -40,7 +41,7 @@ class apiClient {
 
     //get provider (tag) 
     getProvider = () => {
-        let promise = axios
+        let promise = this.axios
             .get('provider', { headers: { authorization: this.token } })
             .then(response => {
                 this.providers = response.data;
@@ -50,7 +51,7 @@ class apiClient {
     }
 
     sendPrice = (prices) => {
-        let promise = axios
+        let promise = this.axios
             .post('item/price', [...prices], { headers: { authorization: this.token } })
         this.promises.push(promise)
         return promise;
