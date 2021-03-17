@@ -1,4 +1,6 @@
-FROM node
+FROM alpine
+
+RUN apk update && apk upgrade && apk add git nodejs npm
 
 COPY config/ config/
 COPY src/ src/
