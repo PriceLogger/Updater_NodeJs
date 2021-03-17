@@ -31,11 +31,16 @@ cron.schedule('0 * * * *', () => {
 
                 }))
                 .then(() => {
-                    //when the fetching of all items is completed send it back to api
-                    API.sendPrice(prices)
-                        .then((response) => {
-                            console.log('Price updated');
-                        })
+                    if (prices.length > 0) {
+                        //when the fetching of all items is completed send it back to api
+                        API.sendPrice(prices)
+                            .then((response) => {
+                                console.log('Price updated');
+                            })
+                    } else {
+                        console.log('No price to update');
+                    }
+
                 })
         })
         .catch(err => {
