@@ -6,24 +6,29 @@ const fetchItem = (url, tag) => {
     const httpOptions = {
         host: url.hostname,
         port: 443,
-        path: url.path
+        path: url.path,
+        timeout: 300,
     };
 
     return new Promise((resolve) => {
         //page reading
-        http.get(httpOptions, (res) => {
-            res.setEncoding("utf8");
-            let body;
-            res.on("data", (chunk) => {
-                //save the html page in a string
-                body += chunk;
+        http
+            .get(httpOptions, (res) => {
+                res.setEncoding("utf8");
+                let body;
+                res.on("data", (chunk) => {
+                    //save the html page in a string
+                    body += chunk;
+                })
+                res.on("end", () => {
+                    //fetch the data of the page
+                    //resolve is a callback
+                    resolve({...extractInformation(body, tag) });
+                })
             })
-            res.on("end", () => {
-                //fetch the data of the page
-                //resolve is a callback
-                resolve({...extractInformation(body, tag) });
-            })
-        });
+            .on('error', (err) =>
+                console.log('Unable to Contact : ' + httpOptions.host)
+            );
     })
 }
 
